@@ -34,7 +34,6 @@ class SQLObject
   end
 
   def self.all
-    # ...
   end
 
   def self.parse_all(results)
@@ -47,11 +46,10 @@ class SQLObject
 
   def initialize(params = {})
     params.each do |attr_name, value|
-      symbol = :"#{attr_name}"
-      unless self.class.columns.include?(symbol)
+      unless self.class.columns.include?(:"#{attr_name}")
         raise "unknown attribute '#{attr_name}'"
       else
-        send("#{symbol}=",value) 
+        send("#{:"#{attr_name}"}=",value) 
       end 
     end
   end
