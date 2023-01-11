@@ -1,5 +1,6 @@
 require_relative 'db_connection'
 require 'active_support/inflector'
+require 'byebug'
 # NB: the attr_accessor we wrote in phase 0 is NOT used in the rest
 # of this project. It was only a warm up.
 
@@ -15,11 +16,11 @@ class SQLObject
   def self.finalize!
     self.columns.each do |col|
       define_method(:"#{col}") do 
-        instance_variable_get("@#{col}")
+        self.attributes[col]
       end
-
-      define_method(:"#{col}=") do |new_val|
-        instance_variable_set("@#{col}", new_val)
+      
+      define_method(:"#{col}=") do |value|
+        self.attributes[col] = value
       end
     end
   end
@@ -45,7 +46,13 @@ class SQLObject
   end
 
   def initialize(params = {})
-    # ...
+    # self.class.columns.each do |attr_name, value|
+    #   raise "unknown attribute '#{attr_name}'" if self.class.columns.include?('#{attr_name}')
+      
+    #   self.class.send(:define_method, :"#{attr_name}=") do
+    #     self.class.attr_writer[:"#{attr_name}"] = value
+    #   end
+    # end
   end
 
   def attributes
