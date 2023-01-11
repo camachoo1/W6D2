@@ -46,13 +46,14 @@ class SQLObject
   end
 
   def initialize(params = {})
-    # self.class.columns.each do |attr_name, value|
-    #   raise "unknown attribute '#{attr_name}'" if self.class.columns.include?('#{attr_name}')
-      
-    #   self.class.send(:define_method, :"#{attr_name}=") do
-    #     self.class.attr_writer[:"#{attr_name}"] = value
-    #   end
-    # end
+    params.each do |attr_name, value|
+      symbol = :"#{attr_name}"
+      unless self.class.columns.include?(symbol)
+        raise "unknown attribute '#{attr_name}'"
+      else
+        send("#{symbol}=",value) 
+      end 
+    end
   end
 
   def attributes
